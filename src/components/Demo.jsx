@@ -1,7 +1,7 @@
 import { copy, linkIcon, loader, tick } from "../assets"
 //Importing hooks from react 
 import { useState, useEffect } from "react"
-import { useLayoutEffect } from "react"
+import { useLazyGetSummaryQuery } from '../services/article'
 
 const Demo = () => {
 
@@ -12,15 +12,24 @@ const Demo = () => {
     summary: ''
   });
 
-
-
-
+  //Calling out an hook 
+  const [getSummary, { error, isfetching }] =
+    useLazyGetSummaryQuery();
 
   // This is the function within which going to make the API request
   // so it has to be a asunchronous function
 
-  const handleSubmit = (e) => {
-    alert('sumbited');
+  const handleSubmit = async (e) => {
+    const { data } = await getSummary({ articleUrl: article.url });
+    //If we get something out of it then create a new article
+    if (data?.summary) {
+      const newArticle = { ...article, summary: data.summary }
+
+      setArticle(newArticle)
+
+    }
+
+
   }
 
 
