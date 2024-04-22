@@ -13,24 +13,29 @@ const Demo = () => {
   });
 
   //Calling out an hook 
-  const [getSummary, { error, isfetching }] =
-    useLazyGetSummaryQuery();
+  const [getSummary, { error, isFetching }] = useLazyGetSummaryQuery();
+
 
   // This is the function within which going to make the API request
   // so it has to be a asunchronous function
 
   const handleSubmit = async (e) => {
-    const { data } = await getSummary({ articleUrl: article.url });
-    //If we get something out of it then create a new article
-    if (data?.summary) {
-      const newArticle = { ...article, summary: data.summary }
+    e.preventDefault();
 
-      setArticle(newArticle)
-
+    if (!article.url) {
+      console.error('URL is required');
+      return;
     }
 
+    const { data } = await getSummary({ articleURL: article.url });
 
+    if (data?.summary) {
+      const newArticle = { ...article, summary: data.summary }
+      setArticle(newArticle);
+      console.log(newArticle);
+    }
   }
+
 
 
 
@@ -102,6 +107,11 @@ onChange: This is an event that happens when you type something into a text box 
 (e) => ...: This part is like a function that says "when the text box changes, do the following...".
 
 setArticle: This is a special function in React that you use to change the information that is shown on the website.
+
+{ ...article, url: e.target.value }: This is a way to update the information about an article. Imagine you have a box where you can write the web address of an article. This part of the code says "take all the information about the article, but change the web address to whatever is written in the box".
+
+
+*/}
 
 { ...article, url: e.target.value }: This is a way to update the information about an article. Imagine you have a box where you can write the web address of an article. This part of the code says "take all the information about the article, but change the web address to whatever is written in the box".
 
